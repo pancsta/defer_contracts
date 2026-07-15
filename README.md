@@ -71,7 +71,7 @@ func main() {
 		Foo: "ab",
 	}
 	// init contracts
-	d.Contracts = NewContracts(d, true)
+	d.Contracts = dc.NewContracts(d, true)
 	// add contracts option 1
 	d.Add(checkFooEven)
 	// add contracts option 2
@@ -87,6 +87,50 @@ for another one integrating with the [nobl9/govy](https://github.com/nobl9/govy)
 ## How To Use
 
 While contracts can be defined anywhere (prod code and tests) they should only be executed in tests. The support for `context` makes it async-compatible and checking will stop in case of a canceled context. Besides data validation, you can check with a "source of truth", like a database or a [state machine](https://github.com/pancsta/asyncmachine-go). The more contracts attached to an instance, the more unwanted scenarios are covered. The execution is not parallel, and the contracts' slice is not thread-safe. Using [zog](https://github.com/Oudwins/zog) for validation is also recommended.
+
+## Documentation
+
+- https://pkg.go.dev/github.com/pancsta/defer_contracts
+
+### `go doc -all`
+
+```go
+package defer_contracts // import "github.com/pancsta/defer_contracts"
+
+
+FUNCTIONS
+
+func ContractsEnable(enabled bool)
+
+TYPES
+
+type Contracts[T any] struct {
+        // Has unexported fields.
+}
+    Contracts is a collection of contracts.
+
+func NewContracts[T any](scope T, enabled bool) *Contracts[T]
+    NewContracts creates a new instance of a Contracts collection.
+
+func (c *Contracts[T]) Add(fns ...func(context.Context, T))
+    Add adds an invariant to the collection.
+
+func (c *Contracts[T]) Check(ctx context.Context, fns ...func(context.Context, T))
+    Check runs the collection of contracts, executing functions in order and
+    stopping on expired context.
+
+type Func[T any] func(ctx context.Context, scope T)
+
+func Compose[T any](fns ...Func[T]) Func[T]
+    Compose composes a list of invariant or pre-condition functions into a
+    single function.
+
+type FuncPost[T any, R any] func(ctx context.Context, scope T, ret R)
+
+func ComposePost[T any, R any](fns ...FuncPost[T, R]) FuncPost[T, R]
+    ComposePost composes a list of post-condition functions into a single
+    function.
+```
 
 ## Alternatives
 

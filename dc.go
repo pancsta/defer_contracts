@@ -1,8 +1,6 @@
 package defer_contracts
 
-import (
-	"context"
-)
+import "context"
 
 type FuncPost[T any, R any] func(ctx context.Context, scope T, ret R)
 type Func[T any] func(ctx context.Context, scope T)
@@ -58,7 +56,7 @@ func (c *Contracts[T]) Check(ctx context.Context, fns ...func(context.Context, T
 	}
 }
 
-// Compose composes a list of contract and pre-condition functions into a single function.
+// Compose composes a list of invariant or pre-condition functions into a single function.
 func Compose[T any](fns ...Func[T]) Func[T] {
 	return func(ctx context.Context, scope T) {
 		for _, fn := range fns {
