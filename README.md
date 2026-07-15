@@ -72,16 +72,16 @@ func main() {
 	}
 	// init contracts
 	d.Contracts = dc.NewContracts(d, true)
-	// add contracts option 1
+	// add invariants option 1
 	d.Add(checkFooEven)
-	// add contracts option 2
+	// add invariants option 2
 	d.Contracts.Add(checkFooEven)
 }
 ```
 
 ### Runnable Example
 
-See [`./dc_test`](./dc_test.go) for a runnable example and [`./integartion/govy_test.go`](./integartion/govy_test.go)
+See [`./dc_test`](./dc_test.go) for a runnable example and [`./integration/govy_test.go`](./integration/govy_test.go)
 for another one integrating with the [nobl9/govy](https://github.com/nobl9/govy) validation library.
 
 ## How To Use
